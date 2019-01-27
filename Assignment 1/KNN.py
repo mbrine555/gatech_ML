@@ -15,25 +15,26 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_selection import SelectFromModel
 
-adult = pd.read_hdf('datasets.hdf','adult')        
-adultX = adult.drop('income',1).copy().values
-adultY = adult['income'].copy().values
+# Load Data       
+adult = pd.read_hdf('./data/datasets.hdf','adult')        
+adultX = adult.drop('TARGET',1).copy().values
+adultY = adult['TARGET'].copy().values
 
-madelon = pd.read_hdf('datasets.hdf','madelon')        
-madelonX = madelon.drop('Class',1).copy().values
-madelonY = madelon['Class'].copy().values
+wine = pd.read_hdf('./data/datasets.hdf','wine')     
+wineX = wine.drop('quality',1).copy().values
+wineY = wine['quality'].copy().values
 
 
 
 adult_trgX, adult_tstX, adult_trgY, adult_tstY = ms.train_test_split(adultX, adultY, test_size=0.3, random_state=0,stratify=adultY)     
-madelon_trgX, madelon_tstX, madelon_trgY, madelon_tstY = ms.train_test_split(madelonX, madelonY, test_size=0.3, random_state=0,stratify=madelonY)     
+wine_trgX, wine_tstX, wine_trgY, wine_tstY = ms.train_test_split(wineX, wineY, test_size=0.3, random_state=0,stratify=wineY)     
 
 
 d = adultX.shape[1]
 hiddens_adult = [(h,)*l for l in [1,2,3] for h in [d,d//2,d*2]]
 alphas = [10**-x for x in np.arange(1,9.01,1/2)]
-d = madelonX.shape[1]
-hiddens_madelon = [(h,)*l for l in [1,2,3] for h in [d,d//2,d*2]]
+d = wineX.shape[1]
+hiddens_wine = [(h,)*l for l in [1,2,3] for h in [d,d//2,d*2]]
 
 
 pipeM = Pipeline([('Scale',StandardScaler()),
@@ -48,21 +49,21 @@ pipeA = Pipeline([('Scale',StandardScaler()),
 
 
 
-params_madelon= {'KNN__metric':['manhattan','euclidean','chebyshev'],'KNN__n_neighbors':np.arange(1,51,3),'KNN__weights':['uniform','distance']}
+params_wine= {'KNN__metric':['manhattan','euclidean','chebyshev'],'KNN__n_neighbors':np.arange(1,51,3),'KNN__weights':['uniform','distance']}
 params_adult= {'KNN__metric':['manhattan','euclidean','chebyshev'],'KNN__n_neighbors':np.arange(1,51,3),'KNN__weights':['uniform','distance']}
 
-madelon_clf = basicResults(pipeM,madelon_trgX,madelon_trgY,madelon_tstX,madelon_tstY,params_madelon,'KNN','madelon')        
+wine_clf = basicResults(pipeM,wine_trgX,wine_trgY,wine_tstX,wine_tstY,params_wine,'KNN','wine')        
 adult_clf = basicResults(pipeA,adult_trgX,adult_trgY,adult_tstX,adult_tstY,params_adult,'KNN','adult')        
 
 
-#madelon_final_params={'KNN__n_neighbors': 43, 'KNN__weights': 'uniform', 'KNN__p': 1}
+#wine_final_params={'KNN__n_neighbors': 43, 'KNN__weights': 'uniform', 'KNN__p': 1}
 #adult_final_params={'KNN__n_neighbors': 142, 'KNN__p': 1, 'KNN__weights': 'uniform'}
-madelon_final_params=madelon_clf.best_params_
+wine_final_params=wine_clf.best_params_
 adult_final_params=adult_clf.best_params_
 
 
 
-pipeM.set_params(**madelon_final_params)
-makeTimingCurve(madelonX,madelonY,pipeM,'KNN','madelon')
+pipeM.set_params(**wine_final_params)
+makeTimingCurve(wineX,wineY,pipeM,'KNN','wine')
 pipeA.set_params(**adult_final_params)
 makeTimingCurve(adultX,adultY,pipeA,'KNN','adult')

@@ -72,11 +72,9 @@ adult = adult.rename(columns=lambda x: x.replace('-','_'))
 
 adult.to_hdf('./data/datasets.hdf','adult',complib='blosc',complevel=9)
 
-# Contraceptive
-types = {'wife_edu':'object', 'hus_edu':'object', 'wife_rel':'object', 
-             'wif_work':'object', 'hus_occ':'object', 'sol_idx':'object', 
-             'media':'object', 'method':'object'}
-cont = pd.read_csv('./data/contraceptive.csv', dtype=types)
-cont = pd.get_dummies(cont, columns=['wife_edu', 'hus_edu', 'hus_occ', 'sol_idx'])
-cont = cont.dropna()
-cont.to_hdf('./data/datasets.hdf', 'contraceptive', complib='blosc', complevel=9)
+# Wine
+# 'Quality' wine is defined as having a quality score > 6
+wine = pd.read_csv('./data/winequality-white.csv', sep=';')
+wine.columns = wine.columns.str.lower().str.replace(' ', '_')
+wine['quality'] = (wine['quality'] > 6).astype('int')
+wine.to_hdf('./data/datasets.hdf', 'wine', complib='blosc', complevel=9)

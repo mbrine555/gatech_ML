@@ -22,7 +22,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_selection import SelectFromModel
 
 class primalSVM_RBF(BaseEstimator, ClassifierMixin):
-    '''http://scikit-learn.org/stable/developers/contributing.html'''
+    '''http://scikit-learn.org/stable/developers/wineributing.html'''
     
     def __init__(self, alpha=1e-9,gamma_frac=0.1,n_iter=2000):
          self.alpha = alpha
@@ -65,19 +65,20 @@ class primalSVM_RBF(BaseEstimator, ClassifierMixin):
          pred = self.clf.predict(new_kernels)
          return pred
     
+# Load Data       
 adult = pd.read_hdf('./data/datasets.hdf','adult')        
 adultX = adult.drop('TARGET',1).copy().values
 adultY = adult['TARGET'].copy().values
 
-cont = pd.read_hdf('./data/datasets.hdf','contraceptive')     
-contX = cont.drop('method',1).copy().values
-contY = cont['method'].copy().values
+wine = pd.read_hdf('./data/datasets.hdf','wine')     
+wineX = wine.drop('quality',1).copy().values
+wineY = wine['quality'].copy().values
 
 adult_trgX, adult_tstX, adult_trgY, adult_tstY = ms.train_test_split(adultX, adultY, test_size=0.3, random_state=0,stratify=adultY)     
-cont_trgX, cont_tstX, cont_trgY, cont_tstY = ms.train_test_split(contX, contY, test_size=0.3, random_state=0,stratify=contY)     
+wine_trgX, wine_tstX, wine_trgY, wine_tstY = ms.train_test_split(wineX, wineY, test_size=0.3, random_state=0,stratify=wineY)     
 
 N_adult = adult_trgX.shape[0]
-N_cont = cont_trgX.shape[0]
+N_wine = wine_trgX.shape[0]
 
 alphas = [10**-x for x in np.arange(1,9.01,1/2)]
 
@@ -93,33 +94,33 @@ alphas = [10**-x for x in np.arange(1,9.01,1/2)]
 #                 ('SVM',SGDClassifier(loss='hinge',l1_ratio=0,penalty='l2',class_weight='balanced',random_state=55))])
 #
 #params_adult = {'SVM__alpha':alphas,'SVM__n_iter':[int((1e6/N_adult)/.8)+1]}
-#params_cont = {'SVM__alpha':alphas,'SVM__n_iter':[int((1e6/N_cont)/.8)+1]}
+#params_wine = {'SVM__alpha':alphas,'SVM__n_iter':[int((1e6/N_wine)/.8)+1]}
 #                                                  
-#cont_clf = basicResults(pipeM,cont_trgX,cont_trgY,cont_tstX,cont_tstY,params_cont,'SVM_Lin','cont')        
+#wine_clf = basicResults(pipeM,wine_trgX,wine_trgY,wine_tstX,wine_tstY,params_wine,'SVM_Lin','wine')        
 #adult_clf = basicResults(pipeA,adult_trgX,adult_trgY,adult_tstX,adult_tstY,params_adult,'SVM_Lin','adult')        
 #
-##cont_final_params = {'SVM__alpha': 0.031622776601683791, 'SVM__n_iter': 687.25}
-#cont_final_params = cont_clf.best_params_
-#cont_OF_params = {'SVM__n_iter': 1303, 'SVM__alpha': 1e-16}
+##wine_final_params = {'SVM__alpha': 0.031622776601683791, 'SVM__n_iter': 687.25}
+#wine_final_params = wine_clf.best_params_
+#wine_OF_params = {'SVM__n_iter': 1303, 'SVM__alpha': 1e-16}
 ##adult_final_params ={'SVM__alpha': 0.001, 'SVM__n_iter': 54.75}
 #adult_final_params =adult_clf.best_params_
 #adult_OF_params ={'SVM__n_iter': 55, 'SVM__alpha': 1e-16}
 #
 #
-#pipeM.set_params(**cont_final_params)                     
-#makeTimingCurve(contX,contY,pipeM,'SVM_Lin','cont')
+#pipeM.set_params(**wine_final_params)                     
+#makeTimingCurve(wineX,wineY,pipeM,'SVM_Lin','wine')
 #pipeA.set_params(**adult_final_params)
 #makeTimingCurve(adultX,adultY,pipeA,'SVM_Lin','adult')
 #
-#pipeM.set_params(**cont_final_params)
-#iterationLC(pipeM,cont_trgX,cont_trgY,cont_tstX,cont_tstY,{'SVM__n_iter':[2**x for x in range(12)]},'SVM_Lin','cont')        
+#pipeM.set_params(**wine_final_params)
+#iterationLC(pipeM,wine_trgX,wine_trgY,wine_tstX,wine_tstY,{'SVM__n_iter':[2**x for x in range(12)]},'SVM_Lin','wine')        
 #pipeA.set_params(**adult_final_params)
 #iterationLC(pipeA,adult_trgX,adult_trgY,adult_tstX,adult_tstY,{'SVM__n_iter':np.arange(1,75,3)},'SVM_Lin','adult')                
 #
 #pipeA.set_params(**adult_OF_params)
 #iterationLC(pipeA,adult_trgX,adult_trgY,adult_tstX,adult_tstY,{'SVM__n_iter':np.arange(1,200,5)},'SVM_LinOF','adult')                
-#pipeM.set_params(**cont_OF_params)
-#iterationLC(pipeM,cont_trgX,cont_trgY,cont_tstX,cont_tstY,{'SVM__n_iter':np.arange(100,2600,100)},'SVM_LinOF','cont')                
+#pipeM.set_params(**wine_OF_params)
+#iterationLC(pipeM,wine_trgX,wine_trgY,wine_tstX,wine_tstY,{'SVM__n_iter':np.arange(100,2600,100)},'SVM_LinOF','wine')                
 
 
 
@@ -143,32 +144,32 @@ pipeA = Pipeline([('Scale',StandardScaler()),
 
 
 params_adult = {'SVM__alpha':alphas,'SVM__n_iter':[int((1e6/N_adult)/.8)+1],'SVM__gamma_frac':gamma_fracsA}
-params_cont = {'SVM__alpha':alphas,'SVM__n_iter':[int((1e6/N_cont)/.8)+1],'SVM__gamma_frac':gamma_fracsM}
+params_wine = {'SVM__alpha':alphas,'SVM__n_iter':[int((1e6/N_wine)/.8)+1],'SVM__gamma_frac':gamma_fracsM}
 #                                                  
-cont_clf = basicResults(pipeM,cont_trgX,cont_trgY,cont_tstX,cont_tstY,params_cont,'SVM_RBF','cont')        
+wine_clf = basicResults(pipeM,wine_trgX,wine_trgY,wine_tstX,wine_tstY,params_wine,'SVM_RBF','wine')        
 adult_clf = basicResults(pipeA,adult_trgX,adult_trgY,adult_tstX,adult_tstY,params_adult,'SVM_RBF','adult')        
 
 
 
-cont_final_params = cont_clf.best_params_
-cont_OF_params = cont_final_params.copy()
-cont_OF_params['SVM__alpha'] = 1e-16
+wine_final_params = wine_clf.best_params_
+wine_OF_params = wine_final_params.copy()
+wine_OF_params['SVM__alpha'] = 1e-16
 adult_final_params =adult_clf.best_params_
 adult_OF_params = adult_final_params.copy()
 adult_OF_params['SVM__alpha'] = 1e-16
 
-pipeM.set_params(**cont_final_params)                     
-makeTimingCurve(contX,contY,pipeM,'SVM_RBF','cont')
+pipeM.set_params(**wine_final_params)                     
+makeTimingCurve(wineX,wineY,pipeM,'SVM_RBF','wine')
 pipeA.set_params(**adult_final_params)
 makeTimingCurve(adultX,adultY,pipeM,'SVM_RBF','adult')
 
 
-pipeM.set_params(**cont_final_params)
-iterationLC(pipeM,cont_trgX,cont_trgY,cont_tstX,cont_tstY,{'SVM__n_iter':[2**x for x in range(12)]},'SVM_RBF','cont')        
+pipeM.set_params(**wine_final_params)
+iterationLC(pipeM,wine_trgX,wine_trgY,wine_tstX,wine_tstY,{'SVM__n_iter':[2**x for x in range(12)]},'SVM_RBF','wine')        
 pipeA.set_params(**adult_final_params)
 iterationLC(pipeA,adult_trgX,adult_trgY,adult_tstX,adult_tstY,{'SVM__n_iter':np.arange(1,75,3)},'SVM_RBF','adult')                
 
 pipeA.set_params(**adult_OF_params)
 iterationLC(pipeA,adult_trgX,adult_trgY,adult_tstX,adult_tstY,{'SVM__n_iter':np.arange(1,75,3)},'SVM_RBF_OF','adult')                
-pipeM.set_params(**cont_OF_params)
-iterationLC(pipeM,cont_trgX,cont_trgY,cont_tstX,cont_tstY,{'SVM__n_iter':np.arange(100,2600,100)},'SVM_RBF_OF','cont')                
+pipeM.set_params(**wine_OF_params)
+iterationLC(pipeM,wine_trgX,wine_trgY,wine_tstX,wine_tstY,{'SVM__n_iter':np.arange(100,2600,100)},'SVM_RBF_OF','wine')                

@@ -35,12 +35,12 @@ adult = pd.read_hdf('./data/datasets.hdf','adult')
 adultX = adult.drop('TARGET',1).copy().values
 adultY = adult['TARGET'].copy().values
 
-cont = pd.read_hdf('./data/datasets.hdf','contraceptive')     
-contX = cont.drop('method',1).copy().values
-contY = cont['method'].copy().values
+wine = pd.read_hdf('./data/datasets.hdf','wine')     
+wineX = wine.drop('quality',1).copy().values
+wineY = wine['quality'].copy().values
 
 adult_trgX, adult_tstX, adult_trgY, adult_tstY = ms.train_test_split(adultX, adultY, test_size=0.3, random_state=0,stratify=adultY)     
-cont_trgX, cont_tstX, cont_trgY, cont_tstY = ms.train_test_split(contX, contY, test_size=0.3, random_state=0,stratify=contY)     
+wine_trgX, wine_tstX, wine_trgY, wine_tstY = ms.train_test_split(wineX, wineY, test_size=0.3, random_state=0,stratify=wineY)     
 
 # Search for good alphas
 alphas = [-1,-1e-3,-(1e-3)*10**-0.5, -1e-2, -(1e-2)*10**-0.5,-1e-1,-(1e-1)*10**-0.5, 0, (1e-1)*10**-0.5,1e-1,(1e-2)*10**-0.5,1e-2,(1e-3)*10**-0.5,1e-3]
@@ -58,20 +58,20 @@ pipeA = Pipeline([('Scale',StandardScaler()),
 
 params = {'DT__criterion':['gini','entropy'],'DT__alpha':alphas,'DT__class_weight':['balanced']}
 
-cont_clf = basicResults(pipeM,cont_trgX,cont_trgY,cont_tstX,cont_tstY,params,'DT','cont')        
+wine_clf = basicResults(pipeM,wine_trgX,wine_trgY,wine_tstX,wine_tstY,params,'DT','wine')        
 adult_clf = basicResults(pipeA,adult_trgX,adult_trgY,adult_tstX,adult_tstY,params,'DT','adult')        
 
 
-#cont_final_params = {'DT__alpha': -0.00031622776601683794, 'DT__class_weight': 'balanced', 'DT__criterion': 'entropy'}
+#wine_final_params = {'DT__alpha': -0.00031622776601683794, 'DT__class_weight': 'balanced', 'DT__criterion': 'entropy'}
 #adult_final_params = {'class_weight': 'balanced', 'alpha': 0.0031622776601683794, 'criterion': 'entropy'}
-cont_final_params = cont_clf.best_params_
+wine_final_params = wine_clf.best_params_
 adult_final_params = adult_clf.best_params_
 
-pipeM.set_params(**cont_final_params)
-makeTimingCurve(contX,contY,pipeM,'DT','cont')
+pipeM.set_params(**wine_final_params)
+makeTimingCurve(wineX,wineY,pipeM,'DT','wine')
 pipeA.set_params(**adult_final_params)
 makeTimingCurve(adultX,adultY,pipeA,'DT','adult')
 
 
-DTpruningVSnodes(pipeM,alphas,cont_trgX,cont_trgY,'cont')
+DTpruningVSnodes(pipeM,alphas,wine_trgX,wine_trgY,'wine')
 DTpruningVSnodes(pipeA,alphas,adult_trgX,adult_trgY,'adult')
