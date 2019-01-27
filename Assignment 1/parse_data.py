@@ -76,5 +76,5 @@ adult.to_hdf('./data/datasets.hdf','adult',complib='blosc',complevel=9)
 # 'Quality' wine is defined as having a quality score > 6
 wine = pd.read_csv('./data/winequality-white.csv', sep=';')
 wine.columns = wine.columns.str.lower().str.replace(' ', '_')
-wine['quality'] = (wine['quality'] > 6).astype('int')
+wine['quality'] = (wine['quality'] >= 6).astype('int')
 wine.to_hdf('./data/datasets.hdf', 'wine', complib='blosc', complevel=9)
