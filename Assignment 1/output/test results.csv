@@ -1,0 +1,12 @@
+KNN,wine,0.8674107142857141,{'KNN__metric': 'chebyshev', 'KNN__n_neighbors': 22, 'KNN__weights': 'distance'}
+KNN,adult,0.7566289728780821,{'KNN__metric': 'manhattan', 'KNN__n_neighbors': 4, 'KNN__weights': 'uniform'}
+DT,wine,0.8723001700680272,{'DT__alpha': 0.0316227766016838, 'DT__class_weight': 'balanced', 'DT__criterion': 'gini'}
+DT,adult,0.8036196664859824,{'DT__alpha': 0.0031622776601683794, 'DT__class_weight': 'balanced', 'DT__criterion': 'entropy'}
+ANN,wine,0.8729591836734694,{'MLP__activation': 'relu', 'MLP__alpha': 3.1622776601683795, 'MLP__hidden_layer_sizes': (11,)}
+ANN,adult,0.7545997130145033,{'MLP__activation': 'relu', 'MLP__alpha': 1.0, 'MLP__hidden_layer_sizes': (112, 112, 112)}
+Boost,wine,0.8723001700680272,{'Boost__base_estimator__alpha': 0.0316227766016838, 'Boost__n_estimators': 10}
+Boost,adult,0.8178895192970002,{'Boost__base_estimator__alpha': 0.0031622776601683794, 'Boost__n_estimators': 20}
+SVM_Lin,wine,0.8764243197278911,{'SVM__alpha': 3.1622776601683795e-05, 'SVM__n_iter': 275}
+SVM_Lin,adult,0.807421404587182,{'SVM__alpha': 0.001, 'SVM__n_iter': 55}
+SVM_RBF,wine,0.8737457482993197,{'SVM__alpha': 0.03162277660168379, 'SVM__gamma_frac': 0.9500000000000002, 'SVM__n_iter': 275}
+SVM_RBF,adult,0.8042856248607035,{'SVM__alpha': 0.01, 'SVM__gamma_frac': 0.6000000000000001, 'SVM__n_iter': 55}
