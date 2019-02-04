@@ -20,8 +20,8 @@ adultX = adult.drop('TARGET',1).copy().values
 adultY = adult['TARGET'].copy().values
 
 wine = pd.read_hdf('./data/datasets.hdf','wine')     
-wineX = wine.drop('quality',1).copy().values
-wineY = wine['quality'].copy().values
+wineX = wine.drop('white',1).copy().values
+wineY = wine['white'].copy().values
 
 alphas = [-1,-1e-3,-(1e-3)*10**-0.5, -1e-2, -(1e-2)*10**-0.5,-1e-1,-(1e-1)*10**-0.5, 0, (1e-1)*10**-0.5,1e-1,(1e-2)*10**-0.5,1e-2,(1e-3)*10**-0.5,1e-3]
 

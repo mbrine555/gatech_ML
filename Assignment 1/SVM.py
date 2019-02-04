@@ -5,6 +5,7 @@ Created on Fri Jan 20 14:23:40 2017
 
 @author: JTay
 """
+import warnings 
 
 import numpy as np
 import sklearn.model_selection as ms
@@ -20,6 +21,7 @@ from sklearn.metrics.pairwise import rbf_kernel
 from sklearn.linear_model import SGDClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_selection import SelectFromModel
+from sklearn.exceptions import DataConversionWarning
 
 class primalSVM_RBF(BaseEstimator, ClassifierMixin):
     '''http://scikit-learn.org/stable/developers/wineributing.html'''
@@ -65,14 +67,18 @@ class primalSVM_RBF(BaseEstimator, ClassifierMixin):
          pred = self.clf.predict(new_kernels)
          return pred
     
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+warnings.filterwarnings("ignore", category=FutureWarning)
+warnings.filterwarnings("ignore", category=DataConversionWarning)
+
 # Load Data       
 adult = pd.read_hdf('./data/datasets.hdf','adult')        
 adultX = adult.drop('TARGET',1).copy().values
 adultY = adult['TARGET'].copy().values
 
 wine = pd.read_hdf('./data/datasets.hdf','wine')     
-wineX = wine.drop('quality',1).copy().values
-wineY = wine['quality'].copy().values
+wineX = wine.drop('white',1).copy().values
+wineY = wine['white'].copy().values
 
 adult_trgX, adult_tstX, adult_trgY, adult_tstY = ms.train_test_split(adultX, adultY, test_size=0.3, random_state=0,stratify=adultY)     
 wine_trgX, wine_tstX, wine_trgY, wine_tstY = ms.train_test_split(wineX, wineY, test_size=0.3, random_state=0,stratify=wineY)     
@@ -83,7 +89,7 @@ N_wine = wine_trgX.shape[0]
 alphas = [10**-x for x in np.arange(1,9.01,1/2)]
 
 
-#Linear SVM
+##Linear SVM
 #pipeM = Pipeline([('Scale',StandardScaler()),
 #                 ('Cull1',SelectFromModel(RandomForestClassifier(random_state=1),threshold='median')),
 #                 ('Cull2',SelectFromModel(RandomForestClassifier(random_state=2),threshold='median')),

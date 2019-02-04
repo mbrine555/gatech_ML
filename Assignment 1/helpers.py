@@ -4,6 +4,7 @@ Created on Fri Jan 20 13:55:38 2017
 
 @author: JTay
 """
+import warnings
 import numpy as np
 from time import clock
 import sklearn.model_selection as ms
@@ -12,7 +13,11 @@ from collections import defaultdict
 from sklearn.metrics import make_scorer, accuracy_score
 from sklearn.utils import compute_sample_weight
 from sklearn.tree import DecisionTreeClassifier as dtclf
+from sklearn.exceptions import DataConversionWarning
 
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+warnings.filterwarnings("ignore", category=FutureWarning)
+warnings.filterwarnings("ignore", category=DataConversionWarning)
 
 def balanced_accuracy(truth,pred):
     wts = compute_sample_weight('balanced',truth)

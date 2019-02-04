@@ -21,9 +21,8 @@ adultX = adult.drop('TARGET',1).copy().values
 adultY = adult['TARGET'].copy().values
 
 wine = pd.read_hdf('./data/datasets.hdf','wine')     
-wineX = wine.drop('quality',1).copy().values
-wineY = wine['quality'].copy().values
-
+wineX = wine.drop('white',1).copy().values
+wineY = wine['white'].copy().values
 
 
 adult_trgX, adult_tstX, adult_trgY, adult_tstY = ms.train_test_split(adultX, adultY, test_size=0.3, random_state=0,stratify=adultY)     
