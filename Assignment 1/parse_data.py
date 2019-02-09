@@ -73,8 +73,7 @@ adult = adult.rename(columns=lambda x: x.replace('-','_'))
 adult.to_hdf('./data/datasets.hdf','adult',complib='blosc',complevel=9)
 
 # Wine
-# 'Quality' wine is defined as having a quality score > 6
 wine = pd.read_csv('./data/winequality.csv')
 wine.columns = wine.columns.str.lower().str.replace(' ', '_')
-wine = wine.drop('quality', axis=1)
+#wine = wine.drop('quality', axis=1)
 wine.to_hdf('./data/datasets.hdf', 'wine', complib='blosc', complevel=9)

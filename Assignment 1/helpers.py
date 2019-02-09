@@ -29,7 +29,7 @@ def basicResults(clfObj,trgX,trgY,tstX,tstY,params,clf_type=None,dataset=None):
     np.random.seed(55)
     if clf_type is None or dataset is None:
         raise
-    cv = ms.GridSearchCV(clfObj,n_jobs=1,param_grid=params,refit=True,verbose=10,cv=5,scoring=scorer)
+    cv = ms.GridSearchCV(clfObj,n_jobs=4,param_grid=params,refit=True,verbose=10,cv=5,scoring=scorer)
     cv.fit(trgX,trgY)
     regTable = pd.DataFrame(cv.cv_results_)
     regTable.to_csv('./output/{}_{}_reg.csv'.format(clf_type,dataset),index=False)
@@ -49,7 +49,7 @@ def iterationLC(clfObj,trgX,trgY,tstX,tstY,params,clf_type=None,dataset=None):
     np.random.seed(55)
     if clf_type is None or dataset is None:
         raise
-    cv = ms.GridSearchCV(clfObj,n_jobs=1,param_grid=params,refit=True,verbose=10,cv=5,scoring=scorer)
+    cv = ms.GridSearchCV(clfObj,n_jobs=4,param_grid=params,refit=True,verbose=10,cv=5,scoring=scorer)
     cv.fit(trgX,trgY)
     regTable = pd.DataFrame(cv.cv_results_)
     regTable.to_csv('./output/ITER_base_{}_{}.csv'.format(clf_type,dataset),index=False)
