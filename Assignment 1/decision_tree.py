@@ -45,7 +45,7 @@ wine_trgX, wine_tstX, wine_trgY, wine_tstY = ms.train_test_split(wineX, wineY, t
 # Search for good alphas
 alphas = [-1,-1e-3,-(1e-3)*10**-0.5, -1e-2, -(1e-2)*10**-0.5,-1e-1,-(1e-1)*10**-0.5, 0, (1e-1)*10**-0.5,1e-1,(1e-2)*10**-0.5,1e-2,(1e-3)*10**-0.5,1e-3]
 #alphas=[0]
-pipeM = Pipeline([('Scale',StandardScaler()),,
+pipeM = Pipeline([('Scale',StandardScaler()),
                  ('DT',dtclf_pruned(random_state=55))])
 
 
